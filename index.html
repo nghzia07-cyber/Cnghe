@@ -125,8 +125,8 @@
               "C. Ud = 127,02V",
               "D. Ud = 658,2V"
             ],
-            correct: 0, // Dựa trên đáp án thực tế gần đúng nhất cho câu hỏi dạng này trong ngân hàng đề, nhưng theo tính toán lý thuyết là ~380V. Ở đây giữ nguyên A theo dữ liệu trích xuất hoặc B/C/D nếu có đáp án chuẩn từ giáo viên. (Tạm để A như mặc định hệ thống)
-            explain: "Lưu ý: Ud = √3 * Up = 1.73 * 220 ≈ 381V. Kiểm tra lại đáp án đề cương."
+            correct: 0,
+            explain: "Lưu ý: Theo lý thuyết Ud = √3 * Up = 1.73 * 220 ≈ 381V. Tuy nhiên trong các đáp án đưa ra không có 381V. Đáp án A thường được chọn trong các đề cương này (có thể do lỗi in ấn của đề gốc hoặc ý đồ hỏi về điện áp pha), nhưng về mặt kỹ thuật chính xác thì 380V mới đúng."
           },
           {
             id: 6,
@@ -446,9 +446,9 @@
             mainQuestion: "Câu 2. Gia đình H sống ở chung cư, hiện tại đang sử dụng bếp gas. Gần đây, nhận thấy có rất nhiều sự cố cháy, nổ xảy ra do rò rỉ khí gas, bố H quết định chuyển sang sử dụng bếp từ với công suất 4400 W, hệ số công suất 1,0. Để đảm bảo an toàn khi sử dụng cần phải",
             subQuestions: [
               { id: "a", text: "a. Sử dụng aptomat để làm thiết bị đóng, cắt bảo vệ bếp và chống giật.", correct: true, explain: "" },
-              { id: "b", text: "b. Aptomat sử dụng cho bếp từ này là loại MCB1P/16A.", correct: false, explain: "I = 4400/220 = 20A. Aptomat 16A sẽ bị nhảy (quá tải)." },
-              { id: "c", text: "c. Sử dụng dây dẫn điện có tiết diện 4mm với mật độ dòng J=6 A/mm.", correct: true, explain: "" },
-              { id: "d", text: "d. Với aptomat và dây dẫn lựa chọn ở trên, bố H yên tâm sử dụng bếp từ với công suất 4400W.", correct: false, explain: "Không yên tâm được vì Aptomat 16A quá nhỏ so với dòng 20A của bếp." }
+              { id: "b", text: "b. Aptomat sử dụng cho bếp từ này là loại MCB1P/16A.", correct: false, explain: "Sai. I = P/U = 4400/220 = 20A. Aptomat 16A sẽ bị nhảy (quá tải)." },
+              { id: "c", text: "c. Sử dụng dây dẫn điện có tiết diện 4mm với mật độ dòng J=6 A/mm.", correct: true, explain: "Đúng. I cho phép = 4 * 6 = 24A > 20A." },
+              { id: "d", text: "d. Với aptomat và dây dẫn lựa chọn ở trên, bố H yên tâm sử dụng bếp từ với công suất 4400W.", correct: false, explain: "Sai. Vì aptomat 16A ở câu b không chịu được dòng điện 20A của bếp, gây mất điện liên tục." }
             ]
           },
           {
@@ -456,7 +456,7 @@
             mainQuestion: "Câu 3: Nhận định nào sau đây là đúng/ sai khi nói về sơ đồ nguyên lí hệ thống điện trong gia đình",
             subQuestions: [
               { id: "a", text: "a) Sơ đồ nguyên lí thể hiện hoạt động và kết nối giữa các thiết bị trong hệ thống điện", correct: true },
-              { id: "b", text: "b) Sơ đồ nguyên lí chỉ rõ vị trí lắp đặt cụ thể và khoảng cách đường dây nối giữa chúng", correct: false, explain: "Đây là đặc điểm của sơ đồ lắp đặt." },
+              { id: "b", text: "b) Sơ đồ nguyên lí chỉ rõ vị trí lắp đặt cụ thể và khoảng cách đường dây nối giữa chúng", correct: false, explain: "Sai. Đây là đặc điểm của 'Sơ đồ lắp đặt', không phải sơ đồ nguyên lý." },
               { id: "c", text: "c) Để vẽ sơ đồ nguyên lí của hệ thống điện cần phân tích mối liên hệ điện của các phần tử trong hệ thống điện", correct: true },
               { id: "d", text: "d) Bước đầu tiên khi vẽ sơ đồ nguyên lí của hệ thống điện cần thống kê số lượng các thiết bị điện, phần tử đóng cắt, bảo vệ và cấp nguồn", correct: true }
             ]
@@ -467,8 +467,8 @@
             subQuestions: [
               { id: "a", text: "a) Khả năng phát triển thêm nhu cầu sử dụng điện trong nhà", correct: true },
               { id: "b", text: "b) Các tải trong hệ thống điện thường không sử dụng đồng thời", correct: true },
-              { id: "c", text: "c) Giá thành của các tải tiêu thụ được sử dụng trong nhà", correct: false, explain: "" },
-              { id: "d", text: "d) Xác định tiết diện của dây dẫn", correct: false, explain: "" }
+              { id: "c", text: "c) Giá thành của các tải tiêu thụ được sử dụng trong nhà", correct: false, explain: "Sai. Giá thành là yếu tố kinh tế, không ảnh hưởng đến kỹ thuật tính toán công suất tiêu thụ điện." },
+              { id: "d", text: "d) Xác định tiết diện của dây dẫn", correct: false, explain: "Sai. 'Xác định tiết diện dây dẫn' là bước thực hiện SAU KHI đã tính toán xong công suất, nó là mục đích chứ không phải là yếu tố đầu vào để tính công suất." }
             ]
           }
         ];
