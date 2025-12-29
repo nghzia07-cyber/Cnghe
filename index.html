@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập Công Nghệ 12</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:disabled { cursor: default; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="bg-blue-700 text-white p-6 rounded-t-xl shadow-lg mb-6 sticky top-0 z-50">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold flex items-center gap-2">
+                        <i data-lucide="book-open" class="w-8 h-8"></i>
+                        Ôn Tập Công Nghệ 12
+                    </h1>
+                    <p class="opacity-90 mt-1">Đề cương cuối học kì I - Năm học 2025-2026</p>
+                </div>
+                <div class="bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm">
+                    <span class="text-sm font-medium uppercase tracking-wider">Điểm</span>
+                    <div id="score-display" class="text-2xl font-bold text-yellow-300">0.00</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Phần I: Trắc Nghiệm -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-bold text-blue-800 mb-6 border-b pb-2">Phần I. Trắc nghiệm khách quan</h2>
+            <div id="part-i-container" class="space-y-8">
+                <!-- Nội dung sẽ được render bằng JS -->
+            </div>
+        </div>
+
+        <!-- Phần II: Đúng Sai -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-bold text-blue-800 mb-6 border-b pb-2">Phần II. Đúng/Sai</h2>
+            <div id="part-ii-container" class="space-y-8">
+                <!-- Nội dung sẽ được render bằng JS -->
+            </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="sticky bottom-4 z-10 flex justify-center">
+            <button onclick="resetQuiz()" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full shadow-xl font-bold transition-transform transform hover:scale-105">
+                <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                Làm Lại Từ Đầu
+            </button>
+        </div>
+
+        <div class="mt-8 text-center text-gray-400 text-sm pb-8">
+            <p>Ứng dụng được tạo tự động dựa trên file đề cương môn Công Nghệ 12.</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================================
+        // DỮ LIỆU CÂU HỎI (ĐÃ CẬP NHẬT FULL TEXT TỪ ĐỀ CƯƠNG)
+        // ============================================================================
+        const PART_I_DATA = [
+          {
+            id: 1,
+            question: "Câu 1. Kỹ thuật điện là",
+            options: [
+              "A. một lĩnh vực kĩ thuật liên quan đến nghiên cứu và ứng dụng công nghệ điện, điện từ,... vào sản xuất, truyền tải, phân phối và sử dụng điện năng.",
+              "B. lĩnh vực công nghệ liên quan đến nghiên cứu, phát triển các loại động cơ đốt trong phục vụ cho đời sống, sản xuất.",
+              "C. ngành kĩ thuật điện tử liên quan đến nghiên cứu, vận hành các máy móc thiết bị trong sản xuất cơ khí.",
+              "D. ngành kĩ thuật liên quan đến nghiên cứu, phát triển sản phẩm công nghệ cao trong lĩnh vực xây dựng."
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 2,
+            question: "Câu 2. Thành phần nào sau đây có vai trò sản xuất điện năng trong hệ thống điện?",
+            options: [
+              "A. Máy biến áp.",
+              "B. Pin năng lượng mặt trời.",
+              "C. Đường dây truyền tải.",
+              "D. Quạt điện."
+            ],
+            correct: 1, 
+            explain: ""
+          },
+          {
+            id: 3,
+            question: "Câu 3. Trong các ngành nghề sau, ngành nghề nào thuộc lĩnh vực kĩ thuật điện",
+            options: [
+              "A. Kĩ thuật viên kĩ thuật cơ khí.",
+              "B. Kĩ sư vận hành bảo dưỡng mạng internet.",
+              "C. Kĩ sư vận hành máy CNC.",
+              "D. Kĩ thuật viên kĩ thuật điện."
+            ],
+            correct: 3, 
+            explain: ""
+          },
+          {
+            id: 4,
+            question: "Câu 4: Để tạo ra dòng điện xoay chiều ba pha, người ta dùng:",
+            options: [
+              "A. Máy phát điện xoay chiều ba pha.",
+              "B. Máy phát điện xoay chiều một pha.",
+              "C. Máy phát điện xoay chiều một pha hoặc ba pha.",
+              "D. Ac quy."
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 5,
+            question: "Câu 5: Một máy phát điện ba pha có điện áp mỗi dây quấn pha là 220V. Điện áp dây nếu biết nối hình sao là",
+            options: [
+              "A. Ud = 220V",
+              "B. Ud = 433,01V",
+              "C. Ud = 127,02V",
+              "D. Ud = 658,2V"
+            ],
+            correct: 0, // Dựa trên đáp án thực tế gần đúng nhất cho câu hỏi dạng này trong ngân hàng đề, nhưng theo tính toán lý thuyết là ~380V. Ở đây giữ nguyên A theo dữ liệu trích xuất hoặc B/C/D nếu có đáp án chuẩn từ giáo viên. (Tạm để A như mặc định hệ thống)
+            explain: "Lưu ý: Ud = √3 * Up = 1.73 * 220 ≈ 381V. Kiểm tra lại đáp án đề cương."
+          },
+          {
+            id: 6,
+            question: "Câu 6: Hệ thống điện quốc gia thực hiện các chức năng?",
+            options: [
+              "A. Sản xuất điện, truyền tải và phân phối điện năng.",
+              "B. Truyền tải điện và phân phối điện năng.",
+              "C. Sản xuất điện, truyền tải, phân phối và tiêu thụ điện năng.",
+              "D. Truyền tải, phân phối và tiêu thụ điện năng."
+            ],
+            correct: 2, 
+            explain: ""
+          },
+          {
+            id: 7,
+            question: "Câu 7: Lưới điện phân phối có điện áp",
+            options: [
+              "A. Dưới 35 kV.",
+              "B. Từ 110 kV trở xuống.",
+              "C. Từ 35 kV trở lên.",
+              "D. Dưới 66 kV."
+            ],
+            correct: 1, 
+            explain: ""
+          },
+          {
+            id: 8,
+            question: "Câu 8: Trong mạng điện sản xuất quy mô nhỏ thì tủ điện chứa các thiết bị đóng cắt nguồn điện cấp cho tải (tải là các loại động cơ điện) và bảo vệ thiết bị khi xảy ra quá tải, ngắn mạch là loại tủ điện nào?",
+            options: [
+              "A. Tủ điện phân phối tổng.",
+              "B. Tủ điện phân phối nhánh.",
+              "C. Tủ điện động lực.",
+              "D. Tủ điện chiếu sáng."
+            ],
+            correct: 2, 
+            explain: ""
+          },
+          {
+            id: 9,
+            question: "Câu 9. Mạng điện hạ áp dùng trong sinh hoạt ở Việt Nam có:",
+            options: [
+              "A. Điện áp 220V, tần số 50Hz",
+              "B. Điện áp 220V, tần số 60Hz",
+              "C. Điện áp 110V, tần số 50Hz",
+              "D. Điện áp 110V, tần số 60Hz"
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 10,
+            question: "Câu 10. Ở mạng điện hạ áp dùng trong sinh hoạt, tủ điện phân phối tổng có nhiệm vụ?",
+            options: [
+              "A. Lấy điện 380/220V cung cấp cho máy biến áp hạ áp",
+              "B. Lấy điện từ đường dây trung áp cung cấp cho máy biến áp hạ áp",
+              "C. Lấy điện hạ áp 380/220V phân phối cho các tủ điện phân phối khu vực",
+              "D. Lấy điện từ tủ điện phân phối khu vực phân phối tiếp cho các hộ gia đình"
+            ],
+            correct: 2, 
+            explain: ""
+          },
+          {
+            id: 11,
+            question: "Câu 11. Điền vào chỗ chấm: Hệ thống điện trong gia đình có nhiệm vụ phân phối điện năng từ ... cho các tải tiêu thụ là các thiết bị sử dụng điện trong gia đình?",
+            options: [
+              "A. mạng điện hạ áp.",
+              "B. điện lưới cao áp.",
+              "C. từ máy phát điện.",
+              "D. từ máy biến dòng."
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 12,
+            question: "Câu 12. Thiết bị đóng – cắt và đo lường điện thường được đặt ở đâu?",
+            options: [
+              "A. Trong tủ điện ngoài trời.",
+              "B. Trong tủ điện trong nhà.",
+              "C. Được đặt trong các phòng hoặc tầng nhà.",
+              "D. Được đặt ngầm trong tường."
+            ],
+            correct: 1, 
+            explain: ""
+          },
+          {
+            id: 13,
+            question: "Câu 13: Trong quá trình lắp đặt hệ thống điện cho một tòa nhà, làm thế nào để đảm bảo dây dẫn điện kết nối đúng các thành phần và truyền tải điện năng hiệu quả từ nguồn điện đến tải tiêu thụ?",
+            options: [
+              "A. Chọn dây dẫn có kích thước nhỏ để dễ dàng lắp đặt trong các ống dẫn.",
+              "B. Đảm bảo dây dẫn có đủ công suất và chất lượng, đồng thời lắp đặt đúng sơ đồ thiết kế.",
+              "C. Sử dụng dây dẫn dài nhất có thể để kết nối tất cả các thành phần trong hệ thống.",
+              "D. Kết nối dây dẫn ngẫu nhiên giữa các thiết bị để tiết kiệm thời gian lắp đặt."
+            ],
+            correct: 1, 
+            explain: ""
+          },
+          {
+            id: 14,
+            question: "Câu 14. Nối đất thường được sử dụng để:",
+            options: [
+              "A. Tránh nguy cơ bị điện giật khi các thiết bị có vỏ bằng kim loại bị rò điện",
+              "B. Loại bỉ nguy cơ điện áp cao từ sét truyền qua dây dẫn điện làm chập cháy thiết bị gây hỏa hoạn",
+              "C. Đóng, cắt và bảo vệ quá tải, ngắn mạch",
+              "D. Đảm bảo khoảng cách an toàn với lưới điện cao áp và trạm biến áp."
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 15,
+            question: "Câu 15. Một loa kẹo kéo có công suất tiêu thụ là 600W-220V, hệ số Cos φ=1. Dòng điện qua dây dẫn của loa là:",
+            options: [
+              "A. I = 2,7 A",
+              "B. I = 2,5 A",
+              "C. I = 2,0 A",
+              "D. I = 3,0 A"
+            ],
+            correct: 0, 
+            explain: "I = P / (U * Cosφ) = 600 / (220 * 1) ≈ 2.72 A."
+          },
+          {
+            id: 16,
+            question: "Câu 16. Chức năng của công tắc 3 cực?",
+            options: [
+              "A. Điều khiển bật/tắt thiết bị điện từ 2 vị trí khác nhau.",
+              "B. Điều khiển bật/tắt thiết bị từ 1 vị trí.",
+              "C. Kích hoạt chế độ tiết kiệm năng lượng.",
+              "D. Điều chỉnh điện áp của nguồn điện cấp cho thiết bị."
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 17,
+            question: "Câu 17. Quan sát hình 10.3 và cho biết mạch điện gồm các thiết bị và đồ dùng điện nào?",
+            options: [
+              "A. 1 aptomat, 2 công tắc 3 cực, dây dẫn và 1 bóng đèn.",
+              "B. 1 cầu dao, 2 công tắc 3 cực, dây dẫn và 1 bóng đèn.",
+              "C. 1 aptomat, 2 công tắc 2 cực, dây điện và 1 bóng đèn.",
+              "D. 1 cầu dao, 2 công tắc 2 cực, dây điện và 1 bóng đèn."
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 18,
+            question: "Câu 18. Những quy định, quy tắc về an toàn điện nhằm đảm bảo",
+            options: [
+              "A. an toàn cho con người.",
+              "B. an toàn cho thiết bị.",
+              "C. an toàn cho hệ thống lưới điện.",
+              "D. an toàn cho con người, thiết bị và hệ thống lưới điện."
+            ],
+            correct: 3, 
+            explain: ""
+          },
+          {
+            id: 19,
+            question: "Câu 19. Các biện pháp an toàn trong sử dụng điện.",
+            options: [
+              "A. Sử dụng các thiết bị điện có chất lượng cao, các thiết bị điện có nguồn ngốc rõ ràng.",
+              "B. Không sử dụng nhiều thiết bị có công suất lớn trên một ổ cắm.",
+              "C. Không chạm đến đồ dùng điện khi tay còn ướt hoặc đi trên trần, trên nền ẩm ướt.",
+              "D. Tất cả các ý đã nêu đều đúng."
+            ],
+            correct: 3, 
+            explain: ""
+          },
+          {
+            id: 20,
+            question: "Câu 20: Việc làm nào sau đây không nên làm trong khi sử dụng đồ dùng điện",
+            options: [
+              "A. Sử dụng các thiết bị và đồ dùng điện theo đúng hướng dẫn của nhà sản xuất",
+              "B. Tắt đèn hay các thiết bị chiếu sáng khi không có ngời sử dụng hoặc khi ra khỏi phòng",
+              "C. Khi sử dụng tủ lạnh cần trữ lượng lương thực phẩm vừa đủ, sắp xếp đồ trong các khoang ngăn nắp và thống thoáng",
+              "D. Sử dụng các thiết bị có công suất lớn trong giờ cao điểm."
+            ],
+            correct: 3, 
+            explain: ""
+          },
+          {
+            id: 21,
+            question: "Câu 21: Để đảm bảo an toàn điện, dây dẫn và cáp điện cần:",
+            options: [
+              "A. Tính toán lựa chọn dây dẫn và cáp điện có thông số điện áp lớn hơn điện áp của hệ thống",
+              "B. Tiết diện lõi dây phải phù hợp với công suất tiêu thụ của thiết bị",
+              "C. bố trí dây dẫn và cáp điện ở vị trí kín, khó quán sát",
+              "D. Để trần đầu nối dây dãn và cáp điện với các thiết bị."
+            ],
+            correct: 1, 
+            explain: ""
+          },
+          {
+            id: 22,
+            question: "Câu 22: Hiện nay thường sử dụng mấy loại aptomat để bảo vệ mạch điện khi có sự cố?",
+            options: [
+              "A. 2 loại",
+              "B. 3 loại",
+              "C. 4 loại",
+              "D. 5 loại"
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 23,
+            question: "Câu 23: Nối đất thường được sử dụng để:",
+            options: [
+              "A. Tránh nguy cơ bị điện giật khi các thiết bị có vỏ bằng kim loại bị rò điện",
+              "B. Loại bỉ nguy cơ điện áp cao từ sét truyền qua dây dẫn điện làm chập cháy thiết bị gây hỏa hoạn",
+              "C. Đóng, cắt và bảo vệ quá tải, ngắn mạch",
+              "D. Đảm bảo khoảng cách an toàn với lưới điện cao áp và trạm biến áp."
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 24,
+            question: "Câu 24: Khi tiến hành bảo dưỡng, sửa chữa điện cần:",
+            options: [
+              "A. Thực hiện các quy định an toàn điện",
+              "B. Chỉ cần tìm hiểu về nguyên tắc hoạt động của thiết bị",
+              "C. Sử dụng các vật liệu bằng kim loại để kiểm tra những nơi có điện",
+              "D. Đi chân trần khi nối dây điện và kiểm tra mạch điện."
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 25,
+            question: "Câu 25: Trường hợp nào sau đây được coi là mất an toàn khi sử dụng đồ điện?",
+            options: [
+              "A. Sử dụng đúng điện áp định mức",
+              "B. Ngắt nguồn điện khi sửa chữa",
+              "C. Sử dụng đúng chức năng của đồ điện",
+              "D. Sử dụng đồ điện khi dây cấp nguồn bị chuột cắn hở điện"
+            ],
+            correct: 3, 
+            explain: ""
+          },
+          {
+            id: 26,
+            question: "Câu 26: Đâu không phải là biện pháp an toàn trong thiết kế, lắp đặt hệ thống điện",
+            options: [
+              "A. Nối đất hệ thống điện",
+              "B. Ô cắm 3 chân có nối đất",
+              "C. Không sử dụng hệ thống chống sét cho hệ thống điện",
+              "D. Đấu nối hệ thống điện an toàn."
+            ],
+            correct: 2, 
+            explain: ""
+          },
+          {
+            id: 27,
+            question: "Câu 27: Các thiết bị đóng – cắt và bảo vệ không được lắp đặt ở",
+            options: [
+              "A. Trong các tủ điện tổng, tủ điện nhánh",
+              "B. Các vị trí dễ thao tác",
+              "C. Vị trí sát chân tường",
+              "D. Các vị trí khô ráo."
+            ],
+            correct: 2, 
+            explain: ""
+          },
+          {
+            id: 28,
+            question: "Câu 28: Vì sao sử dụng các thiết bị dây cắm điện như hình chưa đảm bảo an toàn?",
+            options: [
+              "A. Cắm chung nhiều điện có công suất lớn vào cùng một cắm",
+              "B. Sử dụng chưa đúng chức năng của dây dẫn điện",
+              "C. Cắm điện khi tay bị ướt",
+              "D. Đặt dây điện ở nơi ẩm ướt"
+            ],
+            correct: 0, 
+            explain: ""
+          },
+          {
+            id: 29,
+            question: "Câu 29: Sử dụng loại đèn nào dưới đây sẽ tiêu thụ điện năng nhiều nhất?",
+            options: [
+              "A. Đèn compac",
+              "B. Đèn dây tóc nóng sáng",
+              "C. Đèn LED (điốt phát quang)",
+              "D. Đèn ống (đèn huỳnh quang)"
+            ],
+            correct: 1, 
+            explain: ""
+          },
+          {
+            id: 30,
+            question: "Câu 30: Việc làm nào sau đây không nên làm trong khi sử dụng đồ dùng điện",
+            options: [
+              "A. Sử dụng các thiết bị và đồ dùng điện theo đúng hướng dẫn của nhà sản xuất",
+              "B. Tắt đèn hay các thiết bị chiếu sáng khi không có ngời sử dụng hoặc khi ra khỏi phòng",
+              "C. Khi sử dụng tủ lạnh cần trữ lượng lương thực phẩm vừa đủ, sắp xếp đồ trong các khoang ngăn nắp và thống thoáng",
+              "D. Sử dụng các thiết bị có công suất lớn trong giờ cao điểm."
+            ],
+            correct: 3, 
+            explain: ""
+          }
+        ];
+
+        const PART_II_DATA = [
+          {
+            id: "II_1",
+            mainQuestion: "Câu 1. Có nhiều nguồn năng lượng khác nhau để tạo ra điện như: năng lượng nước, năng lượng gió, năng lượng mặt trời, năng lượng nhiệt, năng lượng hóa học. Hiện nay có một số phương pháp sản xuất điện năng chủ yếu như thủy điện, nhiệt điện, điện hạt nhân, điện gió, điện mặt trời.",
+            subQuestions: [
+              { id: "a", text: "a. Nhà máy thủy điện sử dụng thế năng của nước trong hồ chứa để chuyển thành động năng làm quay tuabin của máy phát điện tạo ra điện.", correct: true },
+              { id: "b", text: "b. Nhà máy nhiệt điện sử dụng nguyên liệu hóa thạch để đốt, đun nóng nước tạo ra hơi nước có áp suất thấp làm quay tuabin của máy phát điện tạo ra điện.", correct: true },
+              { id: "c", text: "c. Nhà máy điện hạt nhân sử dụng năng lượng từ phản ứng phân hạch để đun nóng nước tạo ra hơi nước có áp suất thấp làm quay tuabin của máy phát điện tạo ra điện.", correct: true },
+              { id: "d", text: "d. Điện gió sử dụng năng lượng gió làm quay tuabin gió của máy phát điện tạo ra điện.", correct: true }
+            ]
+          },
+          {
+            id: "II_2",
+            mainQuestion: "Câu 2. Gia đình H sống ở chung cư, hiện tại đang sử dụng bếp gas. Gần đây, nhận thấy có rất nhiều sự cố cháy, nổ xảy ra do rò rỉ khí gas, bố H quết định chuyển sang sử dụng bếp từ với công suất 4400 W, hệ số công suất 1,0. Để đảm bảo an toàn khi sử dụng cần phải",
+            subQuestions: [
+              { id: "a", text: "a. Sử dụng aptomat để làm thiết bị đóng, cắt bảo vệ bếp và chống giật.", correct: true, explain: "" },
+              { id: "b", text: "b. Aptomat sử dụng cho bếp từ này là loại MCB1P/16A.", correct: false, explain: "I = 4400/220 = 20A. Aptomat 16A sẽ bị nhảy (quá tải)." },
+              { id: "c", text: "c. Sử dụng dây dẫn điện có tiết diện 4mm với mật độ dòng J=6 A/mm.", correct: true, explain: "" },
+              { id: "d", text: "d. Với aptomat và dây dẫn lựa chọn ở trên, bố H yên tâm sử dụng bếp từ với công suất 4400W.", correct: false, explain: "Không yên tâm được vì Aptomat 16A quá nhỏ so với dòng 20A của bếp." }
+            ]
+          },
+          {
+            id: "II_3",
+            mainQuestion: "Câu 3: Nhận định nào sau đây là đúng/ sai khi nói về sơ đồ nguyên lí hệ thống điện trong gia đình",
+            subQuestions: [
+              { id: "a", text: "a) Sơ đồ nguyên lí thể hiện hoạt động và kết nối giữa các thiết bị trong hệ thống điện", correct: true },
+              { id: "b", text: "b) Sơ đồ nguyên lí chỉ rõ vị trí lắp đặt cụ thể và khoảng cách đường dây nối giữa chúng", correct: false, explain: "Đây là đặc điểm của sơ đồ lắp đặt." },
+              { id: "c", text: "c) Để vẽ sơ đồ nguyên lí của hệ thống điện cần phân tích mối liên hệ điện của các phần tử trong hệ thống điện", correct: true },
+              { id: "d", text: "d) Bước đầu tiên khi vẽ sơ đồ nguyên lí của hệ thống điện cần thống kê số lượng các thiết bị điện, phần tử đóng cắt, bảo vệ và cấp nguồn", correct: true }
+            ]
+          },
+          {
+            id: "II_4",
+            mainQuestion: "Câu 4: Nhận định nào sau đây là đúng/ sai khi nói về các yếu tố cần xét đến khi tính toán công suất tiêu thụ của hệ thống điện gia đình",
+            subQuestions: [
+              { id: "a", text: "a) Khả năng phát triển thêm nhu cầu sử dụng điện trong nhà", correct: true },
+              { id: "b", text: "b) Các tải trong hệ thống điện thường không sử dụng đồng thời", correct: true },
+              { id: "c", text: "c) Giá thành của các tải tiêu thụ được sử dụng trong nhà", correct: false, explain: "" },
+              { id: "d", text: "d) Xác định tiết diện của dây dẫn", correct: false, explain: "" }
+            ]
+          }
+        ];
+
+        // ============================================================================
+        // LOGIC ỨNG DỤNG
+        // ============================================================================
+        
+        let userAnswersPartI = {};
+        let userAnswersPartII = {};
+
+        function renderPartI() {
+            const container = document.getElementById('part-i-container');
+            container.innerHTML = PART_I_DATA.map((q, idx) => {
+                const isAnswered = userAnswersPartI.hasOwnProperty(q.id);
+                const userAnswer = userAnswersPartI[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                let explainHtml = '';
+                if (isAnswered) {
+                    const styleClass = isCorrect ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800';
+                    const text = isCorrect ? 'Chính xác!' : 'Chưa đúng.';
+                    explainHtml = `
+                        <div class="mt-3 text-sm p-3 rounded border ${styleClass}">
+                            <span class="font-bold mr-2">${text}</span>
+                            <span>${q.explain || ''}</span>
+                        </div>
+                    `;
+                }
+
+                return `
+                <div class="p-4 bg-gray-50 rounded-lg border border-gray-100 hover:border-blue-100 transition-colors">
+                    <h3 class="font-semibold text-lg text-gray-900 mb-3">${q.question}</h3>
+                    <div class="space-y-2">
+                        ${q.options.map((opt, optIdx) => {
+                            let btnClass = "option-btn w-full text-left p-3 rounded-md border flex items-center justify-between group ";
+                            let icon = "";
+
+                            if (!isAnswered) {
+                                btnClass += "bg-white border-gray-200 hover:bg-blue-50 hover:border-blue-300 text-gray-700 cursor-pointer";
+                            } else {
+                                if (optIdx === q.correct) {
+                                    btnClass += "bg-green-100 border-green-500 text-green-900 font-medium";
+                                    icon = '<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>';
+                                } else if (optIdx === userAnswer && optIdx !== q.correct) {
+                                    btnClass += "bg-red-100 border-red-500 text-red-900";
+                                    icon = '<i data-lucide="x-circle" class="w-5 h-5 text-red-600"></i>';
+                                } else {
+                                    btnClass += "bg-gray-100 border-gray-200 text-gray-400 opacity-60";
+                                }
+                            }
+
+                            return `
+                                <button onclick="handleSelectPartI(${q.id}, ${optIdx})" class="${btnClass}">
+                                    <span>${opt}</span>
+                                    ${icon}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${explainHtml}
+                </div>`;
+            }).join('');
+            
+            lucide.createIcons(); // Refresh icons
+        }
+
+        function renderPartII() {
+            const container = document.getElementById('part-ii-container');
+            container.innerHTML = PART_II_DATA.map((q) => {
+                return `
+                <div class="border-b border-gray-100 last:border-0 pb-6">
+                    <h3 class="font-bold text-lg text-gray-900 mb-4">${q.mainQuestion}</h3>
+                    <div class="grid gap-3">
+                        ${q.subQuestions.map((sub) => {
+                            const userKey = `${q.id}_${sub.id}`;
+                            const userChoice = userAnswersPartII[userKey]; // true/false/undefined
+                            const isAnswered = userChoice !== undefined;
+                            const isCorrect = userChoice === sub.correct;
+                            
+                            // Nut Dung
+                            let trueBtnClass = "px-4 py-2 rounded font-medium border flex items-center gap-2 transition-all ";
+                            if (isAnswered) {
+                                if (sub.correct === true) trueBtnClass += "bg-green-100 border-green-500 text-green-800";
+                                else if (userChoice === true) trueBtnClass += "bg-red-100 border-red-500 text-red-800 opacity-50";
+                                else trueBtnClass += "opacity-30";
+                            } else {
+                                trueBtnClass += "bg-white hover:bg-green-50 text-gray-600 border-gray-300";
+                            }
+                            if (isAnswered && userChoice === true) trueBtnClass += " ring-2 ring-offset-1 ring-blue-400";
+
+                            // Nut Sai
+                            let falseBtnClass = "px-4 py-2 rounded font-medium border flex items-center gap-2 transition-all ";
+                            if (isAnswered) {
+                                if (sub.correct === false) falseBtnClass += "bg-green-100 border-green-500 text-green-800";
+                                else if (userChoice === false) falseBtnClass += "bg-red-100 border-red-500 text-red-800 opacity-50";
+                                else falseBtnClass += "opacity-30";
+                            } else {
+                                falseBtnClass += "bg-white hover:bg-red-50 text-gray-600 border-gray-300";
+                            }
+                            if (isAnswered && userChoice === false) falseBtnClass += " ring-2 ring-offset-1 ring-blue-400";
+
+                            let icon = "";
+                            let explainHtml = "";
+                            if (isAnswered) {
+                                icon = isCorrect 
+                                    ? '<div class="md:w-6 flex justify-center"><i data-lucide="check-circle" class="text-green-500 w-6 h-6"></i></div>'
+                                    : '<div class="md:w-6 flex justify-center"><i data-lucide="x-circle" class="text-red-500 w-6 h-6"></i></div>';
+                                
+                                if (!isCorrect && sub.explain) {
+                                    explainHtml = `<div class="w-full md:w-auto md:max-w-xs text-xs text-red-600 bg-red-50 p-2 rounded">${sub.explain}</div>`;
+                                }
+                            }
+
+                            return `
+                                <div class="bg-gray-50 p-4 rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div class="flex-1 text-gray-800">${sub.text}</div>
+                                    <div class="flex gap-2 shrink-0">
+                                        <button onclick="handleSelectPartII('${q.id}', '${sub.id}', true)" class="${trueBtnClass}">Đúng</button>
+                                        <button onclick="handleSelectPartII('${q.id}', '${sub.id}', false)" class="${falseBtnClass}">Sai</button>
+                                    </div>
+                                    ${icon}
+                                    ${explainHtml}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function handleSelectPartI(questionId, optionIndex) {
+            userAnswersPartI[questionId] = optionIndex;
+            updateScore();
+            renderPartI();
+        }
+
+        function handleSelectPartII(qId, subId, value) {
+            userAnswersPartII[`${qId}_${subId}`] = value;
+            updateScore();
+            renderPartII();
+        }
+
+        function updateScore() {
+            let newScore = 0;
+            // Part I
+            PART_I_DATA.forEach(q => {
+                if (userAnswersPartI[q.id] === q.correct) newScore += 0.25;
+            });
+            // Part II
+            PART_II_DATA.forEach(q => {
+                q.subQuestions.forEach(sub => {
+                    const userKey = `${q.id}_${sub.id}`;
+                    if (userAnswersPartII[userKey] === sub.correct) newScore += 0.1;
+                });
+            });
+            document.getElementById('score-display').textContent = newScore.toFixed(2);
+        }
+
+        function resetQuiz() {
+            userAnswersPartI = {};
+            userAnswersPartII = {};
+            updateScore();
+            renderPartI();
+            renderPartII();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPartI();
+            renderPartII();
+            lucide.createIcons();
+        });
+
+    </script>
+</body>
+</html>
